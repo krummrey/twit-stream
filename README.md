@@ -13,3 +13,5 @@ Dependecies:
 * https://github.com/fennb/phirehose
 * https://github.com/tjlytle/Phirehose for User-Streams
 * http://twitter.github.io/bootstrap/
+
+All code is covered by the GPL http://www.gnu.org/licenses/gpl.html
