@@ -10,13 +10,27 @@ $oDB = new db;
 // Is the backend working?
 // get date from last tweet and get the time difference
 $query='SELECT MAX( created_at ) AS lastTweet
-  	FROM tweets';
+		FROM tweets';
 $result = $oDB->select($query);
 $row = mysqli_fetch_assoc($result);
 $lastTweet_db = $row["lastTweet"];
 $lastTweet = strtotime($lastTweet_db);
 $now = date_timestamp_get(date_create());
 $ago = $now-$lastTweet;
+
+// Set up Status-Box
+$box = "success";		// Bootstrap class name
+$msg = "OK!";			// Message for Status Box
+if ($ago > (60*60))		// No tweet in the last hour
+{
+	$box = "warning";
+	$msg = "WARNING!";
+}
+else if ($ago > (60*60*24))	// No tweet in the last day
+{
+	$box = "error";
+	$msg = "ERROR!";
+}
 
 // When was the first recorded Tweet?
 $query='SELECT MIN( created_at ) AS firstTweet
@@ -116,14 +130,14 @@ $URLsCount = $row["URLsCount"];
 				<div class="span9">
 					<div class="well well-small">
 						<h1>Statistics</h1>
-						<p>This is a template for a simple marketing or informational website.
-							<br />The System is collecting tweets for <strong><?php echo $systemRunDays; ?></strong> days now.
+						<p>
+							<br />The System has been collecting tweets for <strong><?php echo $systemRunDays; ?></strong> days now.
 						</p>
 					</div>
 				</div>
 				<div class="span3">
-					<div class=" alert alert-success">
-						<h1>OK</h1>
+					<div class=" alert alert-<?php echo $box; ?>">
+						<h1><?php echo $msg; ?></h1>
 						<p>last update:<br /><strong><?php echo $ago; ?></strong> seconds ago</p>
 					</div>
 				</div>
@@ -147,7 +161,7 @@ $URLsCount = $row["URLsCount"];
 					<h3>&nbsp;</h3>
 					<div class="well well-small">
 						<h4><small>Average per day</small></h4>
-						<h1 class="text-right"><?php echo number_format($tweetsCount/$systemRunDays, 1, ',', ' '); ?></h2>
+						<h1 class="text-right"><?php echo number_format($tweetsCount/$systemRunDays, 0, ',', ' '); ?></h2>
 					</div>
 				</div>
 			</div>
